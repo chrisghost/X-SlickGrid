@@ -2024,12 +2024,8 @@ if (typeof Slick === "undefined") {
 
     function setColumns(columnDefinitions) {
       var _treeColumns = new Slick.TreeColumns(columnDefinitions);
-      if (_treeColumns.hasDepth()) {
-        treeColumns = _treeColumns;
-        columns = treeColumns.extractColumns();
-      } else {
-        columns = columnDefinitions;
-      }
+      treeColumns = _treeColumns;
+      columns = treeColumns.extractColumns();
 
       columnsById = {};
       for (var i = 0; i < columns.length; i++) {
