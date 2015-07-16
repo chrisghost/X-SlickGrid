@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "jquery": "~1.7.0",
-    "jquery-ui": "~1.8.24",
+    "jquery-ui": "~1.9.0",
     "jquery.event": "threedubmedia/jquery.threedubmedia#2.2",
     "jquery-mousewheel": "jquery/jquery-mousewheel#3.0.6",
     "jquery-simulate": "1.0.0",
