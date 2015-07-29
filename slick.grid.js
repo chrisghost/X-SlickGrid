@@ -3917,6 +3917,11 @@ if (typeof Slick === "undefined") {
       // walk up the tree
       var offsetParent = elem.offsetParent;
       while ((elem = elem.parentNode) != document.body) {
+        if (!elem) { // shamelessly copied from https://groups.google.com/forum/#!topic/slickgrid/CHi_iGf56OE
+          box.visible = false;
+          return box;
+        }
+
         if (box.visible && elem.scrollHeight != elem.offsetHeight && $(elem).css("overflowY") != "visible") {
           box.visible = box.bottom > elem.scrollTop && box.top < elem.scrollTop + elem.clientHeight;
         }
