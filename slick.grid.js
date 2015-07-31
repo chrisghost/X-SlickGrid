@@ -509,12 +509,6 @@ if (typeof Slick === "undefined") {
             .bind("dragend", handleDragEnd)
             .delegate(".slick-cell", "mouseenter", handleMouseEnter)
             .delegate(".slick-cell", "mouseleave", handleMouseLeave);
-
-        // Work around http://crbug.com/312427.
-        if (navigator.userAgent.toLowerCase().match(/webkit/) &&
-          navigator.userAgent.toLowerCase().match(/macintosh/)) {
-          $canvas.on("mousewheel", handleMouseWheel);
-        }
       }
     }
 
