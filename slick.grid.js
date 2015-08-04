@@ -2265,7 +2265,10 @@ if (typeof Slick === "undefined") {
       if (options.dataItemColumnValueExtractor) {
         return options.dataItemColumnValueExtractor(item, columnDef);
       }
-      return item[columnDef.field];
+      var r =  item[columnDef.field];
+      if (r == null) r = "" // Seems wrong to do this
+
+      return r
     }
 
     function appendRowHtml(stringArrayL, stringArrayR, row, range, dataLength) {
