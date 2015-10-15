@@ -1212,6 +1212,7 @@ if (typeof Slick === "undefined") {
         $viewportScrollContainerX[0].scrollLeft = $viewportScrollContainerX[0].scrollLeft - 10;
       }
 
+	  var canDragScroll;
       $headers.sortable({
         containment: "parent",
         distance: 3,
@@ -1222,18 +1223,20 @@ if (typeof Slick === "undefined") {
         placeholder: "slick-sortable-placeholder ui-state-default slick-header-column",
         start: function (e, ui) {
           ui.placeholder.width(ui.helper.outerWidth() - headerColumnWidthDiff);
-          $(ui.helper).addClass("slick-header-column-active");
+          canDragScroll = !hasFrozenColumns() ||
+            (ui.placeholder.offset().left + ui.placeholder.width()) > $viewportScrollContainerX.offset().left;
+	      $(ui.helper).addClass("slick-header-column-active");
         },
         beforeStop: function (e, ui) {
           $(ui.helper).removeClass("slick-header-column-active");
         },
         sort: function (e, ui) {
-          if (e.originalEvent.pageX > $container[0].clientWidth) {
+          if (canDragScroll && e.originalEvent.pageX > $container[0].clientWidth) {
             if (!(columnScrollTimer)) {
               columnScrollTimer = setInterval(
                 scrollColumnsRight, 100);
             }
-          } else if (e.originalEvent.pageX < $viewportScrollContainerX.offset().left) {
+          } else if (canDragScroll && e.originalEvent.pageX < $viewportScrollContainerX.offset().left) {
             if (!(columnScrollTimer)) {
               columnScrollTimer = setInterval(
                 scrollColumnsLeft, 100);
@@ -3129,13 +3132,14 @@ if (typeof Slick === "undefined") {
 
       scrollTop = Math.max(0, $viewportScrollContainerY[0].scrollTop - (deltaY * options.rowHeight));
       scrollLeft = $viewportScrollContainerX[0].scrollLeft + (deltaX * 10);
-      _handleScroll(true);
+      var handled = _handleScroll(true);
+      if (handled) e.preventDefault();
     }
 
     function handleScroll() {
       scrollTop = $viewportScrollContainerY[0].scrollTop;
       scrollLeft = $viewportScrollContainerX[0].scrollLeft;
-      _handleScroll(false);
+      return _handleScroll(false);
     }
 
     function _handleScroll(isMouseWheel) {
@@ -3226,6 +3230,9 @@ if (typeof Slick === "undefined") {
       }
 
       trigger(self.onScroll, {scrollLeft: scrollLeft, scrollTop: scrollTop});
+	  
+      if (hScrollDist || vScrollDist) return true;
+      return false;
     }
 
     function asyncPostProcessRows() {
